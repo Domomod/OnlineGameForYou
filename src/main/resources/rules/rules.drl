@@ -1,0 +1,8 @@
+package rules;
+import javax.swing.JOptionPane
+
+rule "rules"
+    when
+    then
+        JOptionPane.showMessageDialog(null, "We are glad you are using our program.\nIt is a rule-based system written for AI class at Poznan University Of Technology.\nThe authors,\nDominik Witczak and Julia Wysocka.", "Welcome", JOptionPane.PLAIN_MESSAGE);
+    end

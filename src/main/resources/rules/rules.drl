@@ -1,8 +1,36 @@
 package rules;
 import javax.swing.JOptionPane
+import java.util.*
+import javax.swing.JPanel
+import javax.swing.JRadioButton
+import javax.swing.JLabel
+import java.awt.Checkbox
+import javax.swing.ButtonGroup
 
-rule "rules"
+rule "Init"
     when
     then
         JOptionPane.showMessageDialog(null, "We are glad you are using our program.\nIt is a rule-based system written for AI class at Poznan University Of Technology.\nThe authors,\nDominik Witczak and Julia Wysocka.", "Welcome", JOptionPane.PLAIN_MESSAGE);
+
+        JPanel jPanel = new JPanel();
+        jPanel.add(new JLabel("What type of game are you looking for?"));
+
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton btn1, btn2, btn3, btn4;
+
+        btn1 = new JRadioButton("Strategy");
+        btn2 = new JRadioButton("RPG");
+        btn3 = new JRadioButton("Shooter");
+        btn4 = new JRadioButton("Virtual world");
+        group.add(btn1 );
+        group.add(btn2 );
+        group.add(btn3 );
+        group.add(btn4 );
+
+        jPanel.add(btn1);
+        jPanel.add(btn2);
+        jPanel.add(btn3);
+        jPanel.add(btn4);
+
+        JOptionPane.showMessageDialog(null, jPanel);
     end

@@ -1,6 +1,7 @@
 package edu.drools.example;
 
 import java.io.IOException;
+import java.util.*;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -16,7 +17,16 @@ public class Main{
 
     public static void main(String[] args) throws DroolsParserException, IOException {
         Main main = new Main();
+
         main.executeHelloWorldRules();
+
+        Window window = new Window();
+        boolean again = window.askTrueFalse("Do you want to start again?");
+        while(again)
+        {
+            main.executeHelloWorldRules();
+            again = window.askTrueFalse("Do you want to start again?");
+        }
     }
 
     public void executeHelloWorldRules() throws IOException, DroolsParserException {
@@ -29,3 +39,4 @@ public class Main{
         session.fireAllRules();
     }
 }
+

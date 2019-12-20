@@ -7,30 +7,986 @@ import javax.swing.JLabel
 import java.awt.Checkbox
 import javax.swing.ButtonGroup
 
+import edu.drools.example.Window
+import java.lang.reflect.Array
+import rules.PreferedGameType
+import rules.RpgGenre
+import rules.PlayedWorldOfWarcraft
+import rules.GameCasuality
+import rules.IntenseGameplyPossible
+import rules.IdealGame
+import rules.SingleOrMulti
+import rules.DigitsInAge
+import rules.AnimeCharacters
+import rules.MassScaleBattles
+import rules.LotrFan
+import rules.QuestsOrPets
+import rules.PlayerVersusPlayer
+import rules.SimmilarToWorldOfWarcraft
+import rules.MostAppearingFeature
+import rules.CombatSystem
+import rules.DungeonsAndDragonsSystem
+import rules.MagicServatsCollectingMaterials
+import rules.Commitments
+import rules.GroundBasedOrSpaceships
+import rules.GameComplexity
+import rules.IsBeingVampireHunterWerewolfStrange;
+
+declare PreferedGameType
+    value : String
+    end
+
+declare RpgGenre
+    value : String
+    end
+
+declare PlayedWorldOfWarcraft
+    value : boolean
+    end
+
+declare GameCasuality
+    value : String
+    end
+
+declare IntenseGameplyPossible
+    value : boolean
+    end
+
+declare SingleOrMulti
+    value : String
+    end
+
+declare DigitsInAge
+    value : String
+    end
+
+declare AnimeCharacters
+    value : boolean
+    end
+
+declare MassScaleBattles
+    value : boolean
+    end
+
+declare LotrFan
+    value : boolean
+    end
+
+declare QuestsOrPets
+    value : String
+    end
+
+declare PlayerVersusPlayer
+    value : boolean
+    end
+
+declare SimmilarToWorldOfWarcraft
+    value : boolean
+    end
+
+declare MostAppearingFeature
+    value : String
+    end
+
+declare CombatSystem
+    value : String
+    end
+
+declare DungeonsAndDragonsSystem
+    value : String
+    end
+
+declare MagicServatsCollectingMaterials
+    value : boolean
+    end
+
+declare Commitments
+    value : String
+    end
+
+declare GroundBasedOrSpaceships
+    value : String
+    end
+
+declare GameComplexity
+    value : String
+    end
+
+declare OldEnoughToRememberWhenTheIncrediblesCameOut
+    value : boolean
+    end
+
+declare IsBeingVampireHunterWerewolfStrange
+    value : boolean
+    end
+
+declare GroundOrFlyingShooter
+    value : String
+    end
+
+declare BigBatllesOrPreciseControl
+    value : String
+    end
+
+declare FightAgaints
+    value : String
+    end
+
+declare PlayAs
+    value : String
+    end
+
+declare StrategyCasuality
+    value : String
+    end
+
+declare HigherLevelOrRealTime
+    value : String
+    end
+
+declare WithRPGElements
+    value : String
+    end
+
+declare BlocksOrLego
+    value : String
+    end
+
+declare MakeFriends
+    value : String
+    end
+
+declare WorldBuiltInOrOpenEnded
+    value : String
+    end
+
+declare StrategySetting
+    value : String
+    end
+
+declare IdealGame
+    value : String
+    end
+
 rule "Init"
     when
     then
         JOptionPane.showMessageDialog(null, "We are glad you are using our program.\nIt is a rule-based system written for AI class at Poznan University Of Technology.\nThe authors,\nDominik Witczak and Julia Wysocka.", "Welcome", JOptionPane.PLAIN_MESSAGE);
 
-        JPanel jPanel = new JPanel();
-        jPanel.add(new JLabel("What type of game are you looking for?"));
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("What type of game are you looking for?", Arrays.asList("Shooters", "Rpgs", "Strategy", "Virtual worlds"));
 
-        ButtonGroup group = new ButtonGroup();
-        JRadioButton btn1, btn2, btn3, btn4;
+        PreferedGameType type = new PreferedGameType();
+        type.setValue(anwser);
+        insert(type);
+    end
 
-        btn1 = new JRadioButton("Strategy");
-        btn2 = new JRadioButton("RPG");
-        btn3 = new JRadioButton("Shooter");
-        btn4 = new JRadioButton("Virtual world");
-        group.add(btn1 );
-        group.add(btn2 );
-        group.add(btn3 );
-        group.add(btn4 );
+rule "RpgGenre"
+    when
+        PreferedGameType( value.equals("Rpgs"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("What genre would you like?", Arrays.asList("Fantasy", "Science Fiction", "Superheroes", "Something completely different"));
 
-        jPanel.add(btn1);
-        jPanel.add(btn2);
-        jPanel.add(btn3);
-        jPanel.add(btn4);
+        RpgGenre fact = new RpgGenre();
+        fact.setValue(anwser);
+        insert(fact);
+    end
 
-        JOptionPane.showMessageDialog(null, jPanel);
+rule "PlayedWorldOfWarcraft"
+    when
+        x : RpgGenre( value.equals("Fantasy"))
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Have you played World of Warcaft?");
+
+        PlayedWorldOfWarcraft fact = new PlayedWorldOfWarcraft();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "World of Warcaft"
+    when
+        x : PlayedWorldOfWarcraft(value == false)
+    then
+        IdealGame fact = new IdealGame();
+        fact.setValue("World of Warcaft");
+        insert(fact);
+    end
+
+rule "GameCasuality"
+    when
+        x : PlayedWorldOfWarcraft(value == true)
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Are you looking for a game you can casually pick up now an then, or something more involved?", Arrays.asList("Casual","Involved"));
+
+        GameCasuality fact = new GameCasuality();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "IntenseGameplyPossible"
+    when
+        x : GameCasuality( value.equals("Casual") )
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("But would you still like the option for more intense play when you have the time for it?");
+
+        IntenseGameplyPossible fact = new IntenseGameplyPossible();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Shaiya"
+    when
+        x : IntenseGameplyPossible(value == true)
+    then
+        IdealGame fact = new IdealGame();
+        fact.setValue("Shaiya");
+        insert(fact);
+    end
+
+rule "SingleOrMulti"
+    when
+        x : IntenseGameplyPossible(value == false)
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like more social features for group play, or a challenging game world to satisfy the solo player?", Arrays.asList("Solo","Social"));
+
+        SingleOrMulti fact = new SingleOrMulti();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Adventure Quest Worlds"
+    when
+        x : SingleOrMulti(value == "Solo")
+    then
+        IdealGame fact = new IdealGame();
+        fact.setValue("Adventure Quest Worlds");
+        insert(fact);
+    end
+
+rule "Dragon Fable"
+    when
+        x : SingleOrMulti(value == "Social")
+    then
+        IdealGame fact = new IdealGame();
+        fact.setValue("Dragon Fable");
+        insert(fact);
+    end
+
+rule "DigitsInAge"
+    when
+        x : GameCasuality(value == "Involved")
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("How many digits are in your age?", Arrays.asList("1 or \"not sure\"","2 or more"));
+
+        DigitsInAge fact = new DigitsInAge();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Wizard 101"
+    when
+        x : DigitsInAge(value == "1 or \"not sure\"")
+    then
+         IdealGame fact = new IdealGame();
+         fact.setValue("Wizard 101");
+         insert(fact);
+    end
+
+rule "AnimeCharacters"
+    when
+        x : DigitsInAge(value == "2 or more")
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Do you like cute, wide-eyed Anime characters?");
+
+        AnimeCharacters fact = new AnimeCharacters();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "MassScaleBattles"
+    when
+    x: AnimeCharacters(value==false)
+    then
+    Window window = new Window();
+            boolean anwser = window.askTrueFalse("Do you enjoy large scale battles or hundreds of players fighting each other?\n");
+
+            MassScaleBattles fact = new MassScaleBattles();
+            fact.setValue(anwser);
+            insert(fact);
+    end
+
+rule "LotrFan"
+    when
+    x: MassScaleBattles(value==true)
+    then
+    Window window = new Window();
+                boolean anwser = window.askTrueFalse("Do you like Lord of the Rings?\n");
+
+                LotrFan fact = new LotrFan();
+                fact.setValue(anwser);
+                insert(fact);
+    end
+
+rule "Lord of the Rings Online"
+    when
+        x : LotrFan(value == true)
+    then
+         IdealGame fact = new IdealGame();
+         fact.setValue("Lord of the Rings Online");
+         insert(fact);
+    end
+
+rule "QuestsOrPets"
+    when
+    x: LotrFan(value==false)
+    then
+    Window window = new Window();
+                String anwser = window.askOneOutOfMany("Do you prefere a game with strong quest or with awesome pets?\n", Arrays.asList("Quests","Pets"));
+
+                QuestsOrPets fact = new QuestsOrPets();
+                fact.setValue(anwser);
+                insert(fact);
+    end
+
+rule "4Story"
+    when
+        x : QuestsOrPets(value == "Quests")
+    then
+         IdealGame fact = new IdealGame();
+         fact.setValue("4Story");
+         insert(fact);
+    end
+
+rule "AIKA"
+    when
+        x : QuestsOrPets(value == "Pets")
+    then
+         IdealGame fact = new IdealGame();
+         fact.setValue("AIKA");
+         insert(fact);
+    end
+
+rule "PlayerVersusPlayer"
+    when
+    x:MassScaleBattles(value == false)
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Are you looking for a game with emphasis on player-vsplayer?");
+
+        PlayerVersusPlayer fact = new PlayerVersusPlayer();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "SimmilarToWorldOfWarcraft"
+    when
+    x: PlayerVersusPlayer(value==true)
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Would you like to find a game as close possible to WoW?");
+
+        SimmilarToWorldOfWarcraft fact = new SimmilarToWorldOfWarcraft();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Runes of Magic"
+    when
+        x : SimmilarToWorldOfWarcraft(value == true)
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Runes of Magic");
+        insert(idealGame);
+    end
+
+rule "MostAppearingFeature"
+    when
+    x : SimmilarToWorldOfWarcraft(value == false)
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Which of these distinctive features appeals to you most?",
+                                                Arrays.asList("Auto-pilot mode to grind for you.",
+                                                "The chance to become a god.",
+                                                "Hack-n-slash dungeon driving, like Diablo"));
+
+        MostAppearingFeature fact = new MostAppearingFeature();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Crystal Saga"
+    when
+        x : MostAppearingFeature(value.equals("Auto-pilot mode to grind for you."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Crystal Saga");
+        insert(idealGame);
+    end
+
+rule "Forsaken World"
+    when
+        x : MostAppearingFeature(value.equals("The chance to become a god."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Forsaken World");
+        insert(idealGame);
+    end
+
+rule "Drakensang"
+    when
+        x : MostAppearingFeature(value.equals("Hack-n-slash dungeon driving, like Diablo"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Drakensang");
+        insert(idealGame);
+    end
+
+rule "CombatSystem"
+    when
+        x : PlayerVersusPlayer(value == false)
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Are you looking for something based on the grand-daddy of RPGs, pen-and-paper Dungeons and Dragons? Or a more complex involved combat system.",
+                                                Arrays.asList("I want to perfect the art of crushing my enemies.", "I love D&D!"));
+
+        CombatSystem fact = new CombatSystem();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Age of Conan"
+    when
+        x : CombatSystem(value.equals("I want to perfect the art of crushing my enemies."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Age of Conan");
+        insert(idealGame);
+    end
+
+rule "DungeonsAndDragonsSystem"
+    when
+        x : CombatSystem(value.equals("I love D&D!"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Do youwant an old-school D&D game with low system requirements, or a cutting edge 3D D&D experience?",
+                                                Arrays.asList("Old-school", "Cutting edge"));
+
+        DungeonsAndDragonsSystem fact = new DungeonsAndDragonsSystem();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Dark Swords"
+    when
+        x : DungeonsAndDragonsSystem(value.equals("Old-school"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Dark Swords");
+        insert(idealGame);
+    end
+
+rule "Dungeons and Dragons Online"
+    when
+        x : DungeonsAndDragonsSystem(value.equals("Cutting edge"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Dungeons and Dragons Online");
+        insert(idealGame);
+    end
+
+rule "MagicServatsCollectingMaterials"
+    when
+        x : AnimeCharacters(value == true)
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Would you like to have magical servants who do the drudge work of collecting materials and crafting for you?");
+
+        MagicServatsCollectingMaterials fact = new MagicServatsCollectingMaterials();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Grand Fantasia"
+    when
+        x : MagicServatsCollectingMaterials(value == true)
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Grand Fantasia");
+        insert(idealGame);
+    end
+
+rule "Commitments"
+    when
+        x : MagicServatsCollectingMaterials(value == false)
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("How are you at making commitments?",
+                                                Arrays.asList(
+                                                        "Great - I'd like a game with an emphasis on forging friendships and marriages.",
+                                                        "Not so great - I'd like a game where I can switch my class at any time."));
+
+        Commitments fact = new Commitments();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Dream of Mirror"
+    when
+        x : Commitments(value.equals("Great - I'd like a game with an emphasis on forging friendships and marriages."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Dream of Mirror");
+        insert(idealGame);
+    end
+
+rule "Eden Eternal"
+    when
+        x : Commitments(value.equals("Not so great - I'd like a game where I can switch my class at any time."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Eden Eternal");
+        insert(idealGame);
+    end
+
+rule "GroundBasedOrSpaceships"
+    when
+        RpgGenre( value.equals("Science Fiction"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like to go on ground-based missions or stick to your spaceship?",
+                                                Arrays.asList(
+                                                        "Beam me down, Scotty.",
+                                                        "I'll stick with outer space."
+                                                ));
+
+        GroundBasedOrSpaceships fact = new GroundBasedOrSpaceships();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Star Trek Online"
+    when
+        x : GroundBasedOrSpaceships(value.equals("Beam me down, Scotty."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Star Trek Online");
+        insert(idealGame);
+    end
+
+rule "GameComplexity"
+    when
+        x : GroundBasedOrSpaceships(value.equals("I'll stick with outer space."))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like a game that's easy to pick up, or one that takes some getting used to but it's huge, epic and involved?",
+                                                Arrays.asList(
+                                                        "Easy to get the hang of.",
+                                                        "The more epic, the better."
+                                                ));
+
+        GameComplexity fact = new GameComplexity();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Dark Orbit"
+    when
+        x : GameComplexity(value.equals("Easy to get the hang of."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Dark Orbit");
+        insert(idealGame);
+    end
+
+rule "EVE Online"
+    when
+        x : GameComplexity(value.equals("The more epic, the better."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("EVE Online");
+        insert(idealGame);
+    end
+
+rule "OldEnoughToRememberWhenTheIncrediblesCameOut"
+    when
+        x : RpgGenre(value.equals("Superheroes"))
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Are you old enough to remember when \"The Incredibles\" came out?");
+
+        OldEnoughToRememberWhenTheIncrediblesCameOut fact = new OldEnoughToRememberWhenTheIncrediblesCameOut();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "DC Universe Online"
+    when
+        x : OldEnoughToRememberWhenTheIncrediblesCameOut(value == true)
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("DC Universe Online");
+        insert(idealGame);
+    end
+
+rule "Superhero Squad Online"
+    when
+        x : OldEnoughToRememberWhenTheIncrediblesCameOut(value == false)
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Superhero Squad Online");
+        insert(idealGame);
+    end
+
+rule "IsBeingVampireHunterWerewolfStrange"
+    when
+        x : RpgGenre(value.equals("Something completely different"))
+    then
+        Window window = new Window();
+        boolean anwser = window.askTrueFalse("Is being vampire-hunting werewolf strange enough to you?");
+
+        IsBeingVampireHunterWerewolfStrange fact = new IsBeingVampireHunterWerewolfStrange();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Bitefight"
+    when
+        x : IsBeingVampireHunterWerewolfStrange(value == true)
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Bitefight");
+        insert(idealGame);
+    end
+
+rule "Glitch"
+    when
+        x : IsBeingVampireHunterWerewolfStrange(value == false)
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Glitch");
+        insert(idealGame);
+    end
+
+rule "GroundOrFlyingShooter"
+    when
+        x : PreferedGameType(value.equals("Shooters"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you rather fight on the ground or while flying through space?", Arrays.asList("Flying through space.", "On the ground."));
+
+        GroundOrFlyingShooter fact = new GroundOrFlyingShooter();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "BigBatllesOrPreciseControl"
+    when
+        x : GroundOrFlyingShooter(value.equals("Flying through space."))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("What means more to you, enormous battles, or the ability to take precise control of your ship's movement?",
+                                                Arrays.asList("Precise control", "Big battles"));
+
+        BigBatllesOrPreciseControl fact = new BigBatllesOrPreciseControl();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Battlestar Galactica"
+    when
+        x : BigBatllesOrPreciseControl(value.equals("Precise control"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Battlestar Galactica");
+        insert(idealGame);
+    end
+
+rule "Ace Online"
+    when
+        x : BigBatllesOrPreciseControl(value.equals("Big battles"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Ace Online");
+        insert(idealGame);
+    end
+
+
+rule "FightAgaints-1"
+    when
+        x : GroundOrFlyingShooter(value.equals("On the ground."))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Who would you rather fight, the military or monsters?", Arrays.asList("Monsters", "Military"));
+
+        FightAgaints fact = new FightAgaints();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "FightAgaints-2"
+    when
+        x : FightAgaints(value.equals("Monsters"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Mummies or Werewolfs?", Arrays.asList("Mummies", "Werewolfs"));
+
+        FightAgaints fact = new FightAgaints();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Wolf Team"
+    when
+        x : FightAgaints(value.equals("Werewolfs"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Wolf Team");
+        insert(idealGame);
+    end
+
+rule "Mission Against Terror"
+    when
+        x : FightAgaints(value.equals("Mummies"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Mission Against Terror");
+        insert(idealGame);
+    end
+
+rule "PlayAs"
+    when
+        x : FightAgaints(value.equals("Military"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Do you see yourself as a World War II vintage tank, or deadly cartoon soldier?", Arrays.asList("Tank", "Soldier"));
+
+        PlayAs fact = new PlayAs();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "World of Tanks"
+    when
+        x : PlayAs(value.equals("Tank"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("World of Tanks");
+        insert(idealGame);
+    end
+
+rule "Lost Saga"
+    when
+        x : PlayAs(value.equals("Soldier"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Lost Saga");
+        insert(idealGame);
+    end
+
+rule "StrategySetting"
+    when
+        gameType : PreferedGameType( value.equals("Strategy"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like your wars and aliances in a fantasy setting, the real world, or 'the family'?", Arrays.asList("Fantasy", "Historical", "Mafia"));
+
+        StrategySetting fact = new StrategySetting();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Godfather: Five Families"
+    when
+        x : StrategySetting(value.equals("Mafia"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Godfather: Five Families");
+        insert(idealGame);
+    end
+
+rule "StrategyCasuality"
+    when
+            x : StrategySetting(value.equals("Historical"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like a casual game that you can put a few minutes into now and then, or a more involved game that might become an obsession?", Arrays.asList("Casual", "Involved"));
+
+        StrategyCasuality fact = new StrategyCasuality();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "HigherLevelOrRealTime"
+    when
+        x : StrategyCasuality(value.equals("Casual"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Do you prefer higher level strategic control of a battle, ora real time tactical control over your troops?", Arrays.asList("Real time Tactics", "Strategic control"));
+
+        HigherLevelOrRealTime fact = new HigherLevelOrRealTime();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "1100 AD"
+    when
+        x : HigherLevelOrRealTime(value.equals("Real time Tactics"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("1100 AD");
+        insert(idealGame);
+    end
+
+rule "Tribal Wars"
+    when
+        x : HigherLevelOrRealTime(value.equals("Strategic control"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Tribal Wars");
+        insert(idealGame);
+    end
+
+rule "Alliances"
+    when
+        x : StrategyCasuality(value.equals("Involved"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Do you want a game that can be played solo, or one that puts an emphasis on forming alliances?", Arrays.asList("It's all me.", "You can't conquer the world without friends."));
+
+        SingleOrMulti fact = new SingleOrMulti();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Castle Empire"
+    when
+        x : SingleOrMulti(value.equals("It's all me."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Castle Empire");
+        insert(idealGame);
+    end
+
+rule "Travian"
+    when
+        x : SingleOrMulti(value.equals("You can't conquer the world without friends."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Travian");
+        insert(idealGame);
+    end
+
+rule "WithRPGElements"
+    when
+        x : StrategySetting(value.equals("Fantasy"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like a game with RPG eelements such as dungeons exploration, or do you want straight-up strategy?", Arrays.asList("Rpg elements.", "Just strategy, please."));
+
+        WithRPGElements fact = new WithRPGElements();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Call of Gods"
+    when
+        x : WithRPGElements(value.equals("Rpg elements."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Call of Gods");
+        insert(idealGame);
+    end
+
+rule "Grepolis"
+    when
+        x : WithRPGElements(value.equals("Just strategy, please."))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Grepolis");
+        insert(idealGame);
+    end
+rule "WorldBuiltInOrOpenEnded"
+    when
+        x : PreferedGameType(value.equals("Virtual worlds"))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Would you like a world with games built in, or would you like a completely freeform experience?", Arrays.asList("Built in games.", "An open-ended-world."));
+
+        WorldBuiltInOrOpenEnded fact = new WorldBuiltInOrOpenEnded();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "BlocksOrLego"
+    when
+        x : WorldBuiltInOrOpenEnded(value.equals("Built in games."))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Which do you prefer to bouild with; blocks or legos?", Arrays.asList("Blocks", "Legos"));
+
+        BlocksOrLego fact = new BlocksOrLego();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "Minecraft Classic"
+    when
+        x : BlocksOrLego(value.equals("Blocks"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Minecraft Classic");
+        insert(idealGame);
+    end
+
+rule "Roblox"
+    when
+        x : BlocksOrLego(value.equals("Legos"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Roblox");
+        insert(idealGame);
+    end
+
+rule "MakeFriends"
+    when
+        x : WorldBuiltInOrOpenEnded(value.equals("An open-ended-world."))
+    then
+        Window window = new Window();
+        String anwser = window.askOneOutOfMany("Are you looking mostly to chat and make new friends, or do you want to create things, too?", Arrays.asList("Chat", "Create"));
+
+        MakeFriends fact = new MakeFriends();
+        fact.setValue(anwser);
+        insert(fact);
+    end
+
+rule "IMVU"
+    when
+        x : MakeFriends(value.equals("Chat"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("IMVU");
+        insert(idealGame);
+    end
+
+rule "Second Life"
+    when
+        x : MakeFriends(value.equals("Create"))
+    then
+        IdealGame idealGame = new IdealGame();
+        idealGame.setValue("Second Life");
+        insert(idealGame);
+    end
+
+rule "End"
+    when
+        x : IdealGame()
+    then
+            JOptionPane.showMessageDialog(null,  x.getValue() + " is an online game for you.\n Thank you for using our software.", "Goodbye", JOptionPane.PLAIN_MESSAGE);
     end
